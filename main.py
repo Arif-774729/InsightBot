@@ -8,7 +8,7 @@ from langchain.document_loaders import PyPDFLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import SeleniumURLLoader, UnstructuredPDFLoader
+from langchain.document_loaders import WebBaseLoader, UnstructuredPDFLoader
 from langchain.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings 
 
@@ -110,7 +110,7 @@ if process_clicked:
     if valid_urls:
         main_placeholder.text("Data Loading from URLs...✅")
         try:
-            loader = SeleniumURLLoader(urls=valid_urls)
+            loader = WebBaseLoader(urls=valid_urls)
             url_docs = loader.load()
             all_docs.extend(url_docs)
         except Exception as e:
