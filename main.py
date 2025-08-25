@@ -102,6 +102,11 @@ llm = ChatGoogleGenerativeAI(
 if process_clicked:
     all_docs = []
 
+    #Reset FAISS store each time
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        print("Old FAISS index deleted. Starting fresh...")
+
     #Process URLs
     valid_urls = [u for u in urls if u.strip()]
     if valid_urls:
