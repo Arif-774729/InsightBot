@@ -78,7 +78,10 @@ st.markdown(
 st.markdown('<div class="main-title">InsightBot: Token-Efficient Research 🤖</div>', unsafe_allow_html=True)
 st.sidebar.markdown("Input Sources")
 
-
+# If old FAISS index exists, remove it before creating a new one
+if os.path.exists("faiss_index.pkl"):
+    os.remove("faiss_index.pkl")
+    
 # URLs input
 urls = []
 for i in range(3):
@@ -101,11 +104,6 @@ llm = ChatGoogleGenerativeAI(
 )
 if process_clicked:
     all_docs = []
-
-    #Reset FAISS store each time
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        print("Old FAISS index deleted. Starting fresh...")
 
     #Process URLs
     valid_urls = [u for u in urls if u.strip()]
