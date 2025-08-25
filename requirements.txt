@@ -1,0 +1,14 @@
+streamlit
+python-dotenv
+langchain
+langchain-community
+langchain-google-genai
+google-generativeai
+langchain-huggingface
+sentence-transformers
+faiss-cpu
+unstructured
+pdf2image
+pdfminer.six
+pypdf
+selenium
