@@ -109,12 +109,13 @@ if process_clicked:
     valid_urls = [u for u in urls if u.strip()]
     if valid_urls:
         main_placeholder.text("Data Loading from URLs...✅")
-        try:
-            loader = WebBaseLoader(urls=valid_urls)
-            url_docs = loader.load()
-            all_docs.extend(url_docs)
-        except Exception as e:
-            st.warning(f"Could not load URLs with Selenium: {e}")
+        for link in valid_urls:
+            try:
+                loader = WebBaseLoader([link])   # expects a list, not `urls=`
+                url_docs = loader.load()
+                all_docs.extend(url_docs)
+            except Exception as e:
+                st.warning(f"Could not load {link}: {e}")
 
 
     #Process PDFs
