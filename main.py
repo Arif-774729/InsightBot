@@ -79,8 +79,8 @@ st.markdown('<div class="main-title">InsightBot: Token-Efficient Research 🤖</
 st.sidebar.markdown("Input Sources")
 
 # If old FAISS index exists, remove it before creating a new one
-if os.path.exists("faiss_index.pkl"):
-    os.remove("faiss_index.pkl")
+if os.path.exists("faiss_store.pkl"):
+    os.remove("faiss_store.pkl")
     
 # URLs input
 urls = []
