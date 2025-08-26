@@ -111,7 +111,7 @@ if process_clicked:
         main_placeholder.text("Data Loading from URLs...✅")
         for link in valid_urls:
             try:
-                loader = WebBaseLoader([link])   # expects a list, not `urls=`
+                loader = WebBaseLoader([link])   
                 url_docs = loader.load()
                 all_docs.extend(url_docs)
             except Exception as e:
