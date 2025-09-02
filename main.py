@@ -150,8 +150,8 @@ if process_clicked:
         vectorstore = FAISS.from_documents(docs, embeddings)
 
         # Saving vectorstore
-        with open(file_path, "wb") as f:
-            pickle.dump(vectorstore, f)
+       vectorstore.save_local("faiss_index")
+
 
         main_placeholder.text("Ask your query...")
         time.sleep(2)
@@ -162,22 +162,27 @@ query = st.text_input("Ask a question about the articles:")
 
 if query:
     if os.path.exists(file_path):
-        with open(file_path, "rb") as f:
-            vectorstore = pickle.load(f)
+        # Recreate embeddings for reload
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        
+        # Load FAISS 
+        vectorstore = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
 
         chain = RetrievalQAWithSourcesChain.from_llm(
             llm=llm,
-            retriever=vectorstore.as_retriever()
+            retriever=vectorstore.as_retriever(search_kwargs={"k": 3})
         )
 
-        result = chain({"question": query}, return_only_outputs=True)
+        with st.spinner("Thinking... 🤔"):
+            result = chain({"question": query})
 
         st.header("Answer")
-        st.write(result["answer"])
+        st.write(result.get("answer", "⚠️ No answer returned."))
 
         sources = result.get("sources", "")
         if sources:
             st.subheader("Sources:")
-            sources_list = sources.split("\n")
-            for source in sources_list:
-                st.write(source)
+            for source in sources.split("\n"):
+                if source.strip():
+                    st.write(source)
+
