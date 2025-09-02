@@ -153,7 +153,7 @@ if process_clicked:
         with open(file_path, "wb") as f:
             pickle.dump(vectorstore, f)
 
-        main_placeholder.text("Embedding Vector Store Rebuilt...✅")
+        main_placeholder.text("Ask your query...")
         time.sleep(2)
 
 
