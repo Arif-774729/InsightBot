@@ -149,12 +149,8 @@ if process_clicked:
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
         vectorstore = FAISS.from_documents(docs, embeddings)
 
-        # Saving vectorstore
-        with open(file_path, "wb") as f:
-             pickle.dump(vectorstore, f)
-
-
-
+        # ✅ Save in session state instead of disk
+        st.session_state["vectorstore"] = vectorstore
         main_placeholder.text("Ask your query...")
         time.sleep(2)
 
