@@ -150,7 +150,9 @@ if process_clicked:
         vectorstore = FAISS.from_documents(docs, embeddings)
 
         # Saving vectorstore
-       vectorstore.save_local("faiss_index")
+        with open(file_path, "wb") as f:
+             pickle.dump(vectorstore, f)
+
 
 
         main_placeholder.text("Ask your query...")
