@@ -8,7 +8,7 @@ from langchain.document_loaders import PyPDFLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import WebBaseLoader, UnstructuredPDFLoader
+from langchain.document_loaders import SeleniumURLLoader, UnstructuredPDFLoader
 from langchain.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings 
 
@@ -79,8 +79,8 @@ st.markdown('<div class="main-title">InsightBot: Token-Efficient Research 🤖</
 st.sidebar.markdown("Input Sources")
 
 # If old FAISS index exists, remove it before creating a new one
-if os.path.exists("faiss_store.pkl"):
-    os.remove("faiss_store.pkl")
+if os.path.exists("faiss_index.pkl"):
+    os.remove("faiss_index.pkl")
     
 # URLs input
 urls = []
@@ -109,13 +109,12 @@ if process_clicked:
     valid_urls = [u for u in urls if u.strip()]
     if valid_urls:
         main_placeholder.text("Data Loading from URLs...✅")
-        for link in valid_urls:
-            try:
-                loader = WebBaseLoader([link])   
-                url_docs = loader.load()
-                all_docs.extend(url_docs)
-            except Exception as e:
-                st.warning(f"Could not load {link}: {e}")
+        try:
+            loader = SeleniumURLLoader(urls=valid_urls)
+            url_docs = loader.load()
+            all_docs.extend(url_docs)
+        except Exception as e:
+            st.warning(f"Could not load URLs with Selenium: {e}")
 
 
     #Process PDFs
@@ -151,11 +150,9 @@ if process_clicked:
 
         # Saving vectorstore
         with open(file_path, "wb") as f:
-             pickle.dump(vectorstore, f)
+            pickle.dump(vectorstore, f)
 
-
-
-        main_placeholder.text("Ask your query...")
+        main_placeholder.text("Embedding Vector Store Rebuilt...✅")
         time.sleep(2)
 
 
@@ -164,27 +161,22 @@ query = st.text_input("Ask a question about the articles:")
 
 if query:
     if os.path.exists(file_path):
-        # Recreate embeddings for reload
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-        
-        # Load FAISS 
-        vectorstore = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+        with open(file_path, "rb") as f:
+            vectorstore = pickle.load(f)
 
         chain = RetrievalQAWithSourcesChain.from_llm(
             llm=llm,
-            retriever=vectorstore.as_retriever(search_kwargs={"k": 3})
+            retriever=vectorstore.as_retriever()
         )
 
-        with st.spinner("Thinking... 🤔"):
-            result = chain({"question": query})
+        result = chain({"question": query}, return_only_outputs=True)
 
         st.header("Answer")
-        st.write(result.get("answer", "⚠️ No answer returned."))
+        st.write(result["answer"])
 
         sources = result.get("sources", "")
         if sources:
             st.subheader("Sources:")
-            for source in sources.split("\n"):
-                if source.strip():
-                    st.write(source)
-
+            sources_list = sources.split("\n")
+            for source in sources_list:
+                st.write(source)
