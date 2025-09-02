@@ -46,3 +46,6 @@ Response → Relevant context sent to LLM → chatbot replies
 ✅ Saves money by reducing API token usage (only relevant chunks sent)
 
 ✅ Works with both PDFs & URLs
+
+
+-- [Live Demo link ](https://insightbot-srun8r9jphm2kpgdqopzgd.streamlit.app/)
