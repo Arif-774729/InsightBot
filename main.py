@@ -158,29 +158,24 @@ if process_clicked:
 # query
 query = st.text_input("Ask a question about the articles:")
 
-if query:
-    if os.path.exists(file_path):
-        # Recreate embeddings for reload
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-        
-        # Load FAISS 
-        vectorstore = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+if query and "vectorstore" in st.session_state:
+    vectorstore = st.session_state["vectorstore"]
 
-        chain = RetrievalQAWithSourcesChain.from_llm(
-            llm=llm,
-            retriever=vectorstore.as_retriever(search_kwargs={"k": 3})
-        )
+    chain = RetrievalQAWithSourcesChain.from_llm(
+        llm=llm,
+        retriever=vectorstore.as_retriever(search_kwargs={"k": 3})
+    )
 
-        with st.spinner("Thinking... 🤔"):
-            result = chain({"question": query})
+    with st.spinner("Thinking... 🤔"):
+        result = chain({"question": query})
 
-        st.header("Answer")
-        st.write(result.get("answer", "⚠️ No answer returned."))
+    st.header("Answer")
+    st.write(result.get("answer", "⚠️ No answer returned."))
 
-        sources = result.get("sources", "")
-        if sources:
-            st.subheader("Sources:")
-            for source in sources.split("\n"):
-                if source.strip():
-                    st.write(source)
+    sources = result.get("sources", "")
+    if sources:
+        st.subheader("Sources:")
+        for source in sources.split("\n"):
+            if source.strip():
+                st.write(source)
 
