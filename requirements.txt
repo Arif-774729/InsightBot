@@ -1,15 +1,23 @@
-streamlit
-python-dotenv
-langchain
-langchain-community
-langchain-google-genai
-google-generativeai
-langchain-huggingface
-sentence-transformers
-faiss-cpu
-unstructured
-pdf2image
-pdfminer.six
-pypdf
-selenium
+streamlit==1.39.0
+python-dotenv==1.0.1
 
+# Core LangChain Ecosystem (Compatible versions)
+langchain==0.1.16
+langchain-core==0.1.52
+langchain-community==0.0.28
+langchain-google-genai==0.0.12
+langchain-huggingface==0.0.2
+
+# Embeddings + Vector DB
+sentence-transformers==2.2.2
+faiss-cpu==1.8.0
+
+# Google GenAI Client
+google-generativeai==0.7.2
+
+# Document Loaders + Parsing
+unstructured==0.14.4
+pdf2image==1.17.0
+pdfminer.six==20221105
+pypdf==4.2.0
+selenium==4.24.0
