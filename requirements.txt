@@ -1,17 +1,12 @@
 streamlit==1.39.0
 python-dotenv==1.0.1
-
-# LangChain core & Google GenAI
 langchain==0.1.16
 langchain-core==0.1.52
 langchain-community==0.0.28
 langchain-google-genai==0.0.12
-
-# Lightweight embeddings + vector store alternative
-chromadb==0.4.22
+langchain-huggingface==0.0.2
 sentence-transformers==2.2.2
+faiss-cpu==1.7.4
 google-generativeai==0.7.2
-
-# Document handling
 pypdf==4.2.0
 pdfminer.six==20221105
