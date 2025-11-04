@@ -1,23 +1,17 @@
 streamlit==1.39.0
 python-dotenv==1.0.1
 
-# LangChain ecosystem (stable)
+# LangChain core & Google GenAI
 langchain==0.1.16
 langchain-core==0.1.52
 langchain-community==0.0.28
 langchain-google-genai==0.0.12
-langchain-huggingface==0.0.2
 
-# Embeddings + Vector store
+# Lightweight embeddings + vector store alternative
+chromadb==0.4.22
 sentence-transformers==2.2.2
-faiss-cpu==1.7.4
-
-# Google SDK
 google-generativeai==0.7.2
 
-# Document loaders / PDF parsing
-unstructured==0.14.4
+# Document handling
 pypdf==4.2.0
 pdfminer.six==20221105
-
-# Remove pdf2image + selenium (need system binaries)
