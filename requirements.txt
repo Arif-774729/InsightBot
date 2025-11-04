@@ -12,3 +12,14 @@ pdf2image
 pdfminer.six
 pypdf
 selenium
+streamlit==1.38.0
+python-dotenv==1.0.1
+langchain==0.2.15
+langchain-core==0.2.27
+langchain-community==0.2.15
+langchain-google-genai==0.0.11
+langchain-huggingface==0.0.3
+sentence-transformers==3.0.1
+faiss-cpu==1.8.0
+unstructured==0.15.0
+pydantic==1.10.14
